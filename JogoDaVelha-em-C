@@ -1,0 +1,280 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<locale.h>
+
+void limparMatriz(char matriz[3][3]){
+	
+	for(int i=0;i<3;i++){
+		for(int j=0;j<3;j++){
+			matriz[i][j] = ' ';
+		}
+	}
+	
+}
+
+void escreveMatriz(char matriz[3][3]){
+	int i=0;
+  	int j=0;
+	printf("        JOGO DA VELHA        \n\n");	
+	printf("\t   0   1   2   \n");
+	for(i=0;i<3;i++){
+		printf("\t%d ", i);
+			for(j=0;j<3;j++){
+				printf(" %c ", matriz[i][j]);
+				if(j<2){
+					printf("|");
+				}
+			}		
+		printf("\n");
+		if(i<2){
+			printf("\t  ---|---|---");
+			printf("\n");
+		}
+	}
+	
+}
+
+void nome(char jogador1[30], char jogador2[30], char matriz[3][3]){
+	
+		escreveMatriz(matriz);
+		
+		printf("\n\nDigite o nome do jogador 1: \n");
+		scanf("%s", jogador1);
+		system("cls");
+		
+		escreveMatriz(matriz);
+		
+		printf("\n\nDigite o nome do jogador 2: \n");
+		scanf("%s", jogador2);
+		system("cls");
+}
+
+void Coordenada(char matriz[3][3], int numeroTeste){
+	int linha=0, coluna=0, aux=0;
+	do{	
+		do{
+			system("cls");
+			escreveMatriz(matriz);
+			printf("\n\n\tVEZ DO JOGADOR %d", numeroTeste);
+			printf("\n\nDigite uma posição para a linha: ");
+			aux = scanf("%d", &linha);
+				printf("\n\nDigite uma posição para a coluna: ");
+				aux = scanf("%d", &coluna);
+					getchar();
+					while( (linha<0||linha>2) || (coluna<0||coluna>2)){
+					system("cls");
+					escreveMatriz(matriz);
+						printf("\n\n\tVEZ DO JOGADOR %d", numeroTeste);
+						printf("\n\nDigite uma posição para a linha: ");
+						aux = scanf("%d", &linha);
+						printf("\n\nDigite uma posição para a coluna: ");
+						aux = scanf("%d", &coluna);
+						getchar();
+				}	
+		}while(aux==0);
+	}while(matriz[linha][coluna]!= ' ');
+	
+		if(numeroTeste == 1){
+			matriz[linha][coluna] = 'X';
+		}else{
+			matriz[linha][coluna] = 'O';
+		}
+}
+
+int verificarVencedor(char matriz[3][3]){
+	int vencedor = 0;
+	
+	if(matriz[0][0] == matriz[0][1] && matriz[0][1] == matriz[0][2]){
+		if(matriz[0][0] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[0][0] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+		
+	}
+	if(matriz[1][0] == matriz[1][1] && matriz[1][1] == matriz[1][2]){
+		if(matriz[1][0] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[1][0] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+		
+	}
+	if(matriz[2][0] == matriz[2][1] && matriz[2][1] == matriz[2][2]){
+		if(matriz[2][0] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[2][0] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+		
+	}
+	if(matriz[0][0] == matriz[1][0] && matriz[1][0] == matriz[2][0]){
+		if(matriz[0][0] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[0][0] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+	}
+	if(matriz[0][1] == matriz[1][1] && matriz[1][1] == matriz[2][1]){
+		if(matriz[0][1] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[0][1] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+	}
+	if(matriz[0][2] == matriz[1][2] && matriz[1][2] == matriz[2][2]){
+		if(matriz[0][2] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[0][2] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+	}
+	if(matriz[0][0] == matriz[1][1] && matriz[1][1] == matriz[2][2]){
+		if(matriz[0][0] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[0][0] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}
+	}
+	if(matriz[0][2] == matriz[1][1] && matriz[1][1] == matriz[2][0]){
+		if(matriz[0][2] == 'X'){
+			vencedor = 1;
+			return vencedor;
+		}else if(matriz[0][2] == 'O'){
+			vencedor = 2;
+			return vencedor;
+		}	
+	}
+}
+
+void play(char matriz[3][3], char jogador1[30], char jogador2[30], int *venceu, int *vt1, int *vt2, int *ve){
+    	
+    int teste1=0, teste2=0,velha=0, contador=0, contadorVelha = 0, numeroTeste = 1;
+    char op = ' ';
+    
+	while(teste1 == 0 && teste2 == 0 && velha == 0){
+		if(contador % 2 == 0){
+		numeroTeste = 1;
+		Coordenada(matriz, numeroTeste);
+		*venceu = verificarVencedor(matriz);
+		contadorVelha++;
+		if(contadorVelha == 9 && *venceu != 1 && *venceu != 2){
+			*venceu = 0;
+		}
+		switch(*venceu){
+			case 1: 
+			*vt1+=1;
+			teste1++;
+			break;
+	
+			case 2:
+			*vt2+=1;
+			teste2++;
+			break;
+
+			case 0:
+			*ve+=1;
+			velha++;
+			break;
+		}
+		contador++;
+				
+		}else{
+		numeroTeste = 2;
+		Coordenada(matriz, numeroTeste);
+		*venceu = verificarVencedor(matriz);
+		contadorVelha++;
+		if(contadorVelha == 9 && *venceu != 1 && *venceu != 2){
+			*venceu = 0;
+		}
+		switch(*venceu){
+			case 1:
+			*vt1+=1;
+			teste1++;
+            break;
+			case 2:
+			*vt2+=1;
+			teste2++;
+			break;
+			case 0:	
+			*ve+=1;
+			velha++;
+			break;
+		}
+
+		contador++;
+		}
+	}
+}
+
+int main(void){
+	setlocale(LC_ALL, "Portuguese");
+	char jogador1[30], jogador2[30], op = ' ';
+	char jogo[3][3];
+	int aux = 0, venceu = 0, vt1 = 0, vt2 = 0, ve = 0;
+	
+	limparMatriz(jogo);
+	escreveMatriz(jogo);
+	printf("\n\nPRESSIONE ENTER PARA JOGAR!!! ");
+	getchar();
+	system("cls");
+	nome(jogador1, jogador2, jogo);
+	
+	do{
+	limparMatriz(jogo);
+	play(jogo, jogador1, jogador2, &venceu, &vt1, &vt2, &ve);	
+	do{
+		if(venceu == 1){
+			system("cls");
+			escreveMatriz(jogo);
+			printf("\n\n\tJOGADOR 1 VENCEU!!!\n\n\n");
+			printf("VITÓRIAS DO JOGADOR 1 (%s): %d\n", jogador1, vt1);
+			printf("VITÓRIAS DO JOGADOR 2 (%s): %d\n", jogador2, vt2);
+			printf("EMPATES: %d\n\n\n", ve);
+			printf("\nDeseja jogar novamente? [s/n] ");
+			scanf("%c" , &op);
+		}else if(venceu == 2){
+			system("cls");
+			escreveMatriz(jogo);
+			printf("\n\n\tJOGADOR 2 VENCEU!!!\n\n\n");
+			printf("VITÓRIAS DO JOGADOR 1 (%s): %d\n", jogador1, vt1);
+			printf("VITÓRIAS DO JOGADOR 2 (%s): %d\n", jogador2, vt2);
+			printf("EMPATES: %d\n\n\n", ve);
+			printf("\nDeseja jogar novamente? [s/n] ");
+			scanf("%c" , &op);
+		}else{
+			system("cls");
+			escreveMatriz(jogo);
+			printf("\n\n\tDEU VELHA!!!\n\n\n");
+			printf("VITÓRIAS DO JOGADOR 1 (%s): %d\n", jogador1, vt1);
+			printf("VITÓRIAS DO JOGADOR 2 (%s): %d\n", jogador2, vt2);
+			printf("EMPATES: %d\n\n\n", ve);
+			printf("\nDeseja jogar novamente? [s/n] ");
+			scanf("%c" , &op);
+		}
+
+	}while(op!= 's' && op!= 'n');
+	
+	if(op == 's'){
+		aux = 0;
+	}else if(op == 'n'){
+		printf("\n\nObrigado por Jogar!!!\n\n");
+		aux++;
+	}
+	
+	}while(aux == 0);
+}
